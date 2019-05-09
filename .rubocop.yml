@@ -1,0 +1,74 @@
+AllCops:
+  Exclude:
+    - 'db/schema.rb'
+    - 'lib/templates/**/*'
+    - 'bin/rspec'
+    - 'config/initializers/ldap_authenticatable.rb'
+# Enabling only on actual rails files, not rake tasks
+Rails:
+  Enabled: true
+  Exclude:
+    - 'lib/**/*'
+    - 'db/**/*'
+
+#Broken Cop
+Layout/BlockEndNewline:
+  Enabled: false
+
+Layout/AlignParameters:
+  EnforcedStyle: with_fixed_indentation
+Layout/CaseIndentation:
+  EnforcedStyle: end
+Layout/IndentFirstHashElement:
+  EnforcedStyle: consistent
+Metrics/AbcSize:
+  Enabled: false
+Metrics/BlockLength:
+  Enabled: false
+Metrics/BlockNesting:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Enabled: false
+Rails/InverseOf:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
+Style/FormatStringToken:
+  Enabled: false
+Style/HashSyntax:
+  EnforcedStyle: ruby19_no_mixed_keys
+
+#Discussion Topics:
+Rails/Output:
+  Enabled: false
+Style/AndOr:
+  EnforcedStyle: conditionals
+Style/Documentation:
+  Enabled: false
+Style/EmptyMethod:
+  Enabled: false
+# FrozenStringLiteralComment actually slows down tests slightly.
+Style/FrozenStringLiteralComment:
+  Enabled: false
+Style/IfUnlessModifier:
+  Enabled: false
+Style/NumericLiterals:
+  Enabled: false
+Style/PercentLiteralDelimiters:
+  Enabled: false
+Style/SymbolArray:
+  Enabled: false
+  # EnforcedStyle: brackets
+Style/WordArray:
+  Enabled: false
+  # EnforcedStyle: brackets
+Style/GuardClause:
+  Enabled: false
