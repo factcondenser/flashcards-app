@@ -4,10 +4,13 @@
     <title>FlashcardsApp</title>
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
-    <!--<link rel="manifest" href="/manifest.json" />-->
     <%= stylesheet_link_tag 'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_pack_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= favicon_link_tag asset_path('flashcards-study-app-logo.png') %>
+    <%= favicon_link_tag asset_path('flashcards-study-app-logo-192.png') %>
+    <!-- Lighthouse Details -->
+    <link rel="manifest" crossorigin="use-credentials" href="/manifest.json">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#C50001"/>
   </head>
 
   <body>
