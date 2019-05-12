@@ -80,4 +80,4 @@ test:
 #
 production:
   <<: *default
-  url: $(heroku config:get DATABASE_URL -a flashcards-study-app)
+  url: <%= ENV['DATABASE_URL'] %>
