@@ -2,14 +2,13 @@
 // like app/views/layouts/application.html.erb. All it does is render <div>Hello React</div> at the bottom
 // of the page.
 
-import React from 'react'
-import ReactDOM from 'react-dom'
-import App from '../components/App'
-import 'bootstrap/dist/css/bootstrap.css';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import App from '../components/App';
 
 document.addEventListener('DOMContentLoaded', () => {
-  const node = document.getElementById('flashcards_data')
-  const data = JSON.parse(node.getAttribute('data'))
+  const node = document.getElementById('flashcards_data');
+  const data = JSON.parse(node.getAttribute('data'));
 
   ReactDOM.render(
     <App flashcards={data}/>,
