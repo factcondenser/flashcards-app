@@ -80,6 +80,4 @@ test:
 #
 production:
   <<: *default
-  database: flashcards-app-production # Heroku doesn't allow underscores in db names
-  username: flashcards_app
-  password: <%= ENV['FLASHCARDS_APP_DATABASE_PASSWORD'] %>
+  url: $(heroku config:get DATABASE_URL -a flashcards-study-app)
