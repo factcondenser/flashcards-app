@@ -5,10 +5,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
 import App from '../components/App'
+import 'bootstrap/dist/css/bootstrap.css';
 
 document.addEventListener('DOMContentLoaded', () => {
+  const node = document.getElementById('flashcards_data')
+  const data = JSON.parse(node.getAttribute('data'))
+
   ReactDOM.render(
-    <App />,
+    <App flashcards={data}/>,
     document.body.appendChild(document.createElement('div')),
   )
 })

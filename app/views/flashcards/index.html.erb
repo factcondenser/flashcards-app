@@ -1,1 +1,6 @@
 <%= javascript_pack_tag 'index' %>
+
+<%= content_tag :div,
+  id: "flashcards_data",
+  data: @flashcards.to_json do %>
+<% end %>
