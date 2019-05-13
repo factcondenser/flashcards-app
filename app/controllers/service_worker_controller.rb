@@ -2,11 +2,9 @@ class ServiceWorkerController < ApplicationController
   protect_from_forgery except: [:service_worker, :push]
 
   def service_worker
-    redirect_to flashcards_url
   end
 
   def manifest
-    redirect_to flashcards_url
   end
 
   def push

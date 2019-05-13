@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('flashcards_data');
   const { flashcards, vapid_public_key: vapidPublicKey } = JSON.parse(node.getAttribute('data'));
 
-  if ('serviceWorker' in navigator) {
+  if (navigator.serviceWorker) {
     if (!navigator.serviceWorker.controller) {
       registerServiceWorker();
     }

@@ -2,7 +2,7 @@ var CACHE_VERSION = 'v1';
 var CACHE_NAME = CACHE_VERSION + ':sw-cache-';
 
 function onInstall(event) {
-  console.log('[Serviceworker]', "Installing!", event);
+  console.log('[Serviceworker]', "Installing!");
   event.waitUntil(
     caches.open(CACHE_NAME).then(function prefill(cache) {
       return cache.addAll([
@@ -17,7 +17,7 @@ function onInstall(event) {
 }
 
 function onActivate(event) {
-  console.log('[Serviceworker]', "Activating!", event);
+  console.log('[Serviceworker]', "Activating!");
   event.waitUntil(
     caches.keys().then(function(cacheNames) {
       return Promise.all(
@@ -36,7 +36,7 @@ function onActivate(event) {
 
 // Borrowed from https://github.com/TalAter/UpUp
 function onFetch(event) {
-  console.log('[Serviceworker]', "Fetching!", event);
+  console.log('[Serviceworker]', "Fetching!");
   event.respondWith(
     // try to return untouched request from network first
     fetch(event.request).catch(function() {
@@ -48,7 +48,7 @@ function onFetch(event) {
         // if not found in cache, return default offline content for navigate requests
         if (event.request.mode === 'navigate' ||
           (event.request.method === 'GET' && event.request.headers.get('accept').includes('text/html'))) {
-          console.log('[Serviceworker]', "Fetching offline content", event);
+          console.log('[Serviceworker]', "Fetching offline content!");
           return caches.match('/offline.html');
         }
       })
@@ -59,7 +59,7 @@ function onFetch(event) {
 // The serviceworker context can respond to 'push' events and trigger
 // notifications on the registration property
 function onPush(event) {
-  console.log('[Serviceworker]', "Pushing!", event);
+  console.log('[Serviceworker]', "Pushing!");
   let title = (event.data && event.data.text()) || "Yay a message";
   let body = "We have received a push message";
   // let tag = "push-simple-demo-notification-tag";
