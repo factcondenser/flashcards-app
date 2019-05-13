@@ -1,4 +1,5 @@
 export const registerServiceWorker = async () => {
+  console.log('registering...')
   await navigator.serviceWorker.register('/service-worker.js', { scope: './' });
   console.log('[Companion]', 'Service worker registered!');
 }
