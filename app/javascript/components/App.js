@@ -174,6 +174,24 @@ class App extends React.Component {
     this.setState({ danger: '' });
   }
 
+  sendPushNotification = async () => {
+    const registration = await navigator.serviceWorker.ready;
+    const subscription = await registration.pushManager.getSubscription();
+    fetch('/push', {
+      method: "POST",
+      mode: "cors",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      redirect: "follow",
+      referrer: 'no-referrer',
+      body: JSON.stringify({
+        subscription: subscription.toJSON(),
+        message: 'You clicked a button!'
+      })
+    });
+  }
+
   render() {
     const { flashcards, danger, success } = this.state;
     const flashcardListing = Object.keys(flashcards).map((id) => {
@@ -201,6 +219,7 @@ class App extends React.Component {
         {flashcardListing}
         <br/>
         <button onClick={this.appendFlashcardForm}>New Flashcard</button>
+        <button onClick={this.sendPushNotification} id="webpush-button">Send Push Notification</button>
       </div>
     )
   }

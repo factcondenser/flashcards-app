@@ -4,6 +4,7 @@ class FlashcardsController < ApplicationController
 
   def index
     @flashcards = Flashcard.all
+    @vapid_public_key = Base64.urlsafe_decode64(ENV['VAPID_PUBLIC_KEY']).bytes
   end
 
   def show

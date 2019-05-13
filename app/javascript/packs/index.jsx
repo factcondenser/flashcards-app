@@ -5,13 +5,19 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from '../components/App';
+import { registerServiceWorker, subscribeWorkerToService } from '../service-worker-companion';
 
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('flashcards_data');
-  const data = JSON.parse(node.getAttribute('data'));
+  const { flashcards, vapid_public_key: vapidPublicKey } = JSON.parse(node.getAttribute('data'));
+
+  if (navigator.serviceWorker) {
+    registerServiceWorker();
+    subscribeWorkerToService(new Uint8Array(vapidPublicKey));
+  };
 
   ReactDOM.render(
-    <App flashcards={data}/>,
+    <App flashcards={flashcards}/>,
     document.body.appendChild(document.createElement('div')),
   )
 })

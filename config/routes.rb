@@ -6,4 +6,5 @@ Rails.application.routes.draw do
   # Service Worker Routes
   get '/service-worker.js' => 'service_worker#service_worker'
   get '/manifest.json' => 'service_worker#manifest'
+  post '/push' => 'service_worker#push'
 end
