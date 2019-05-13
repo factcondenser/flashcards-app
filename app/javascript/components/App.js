@@ -81,7 +81,7 @@ class App extends React.Component {
     const { term, definition } = this.state.flashcards[id];
     try {
       const response = await fetch(`${process.env.FLASHCARDS_APP_URL}/flashcards/${id}`, {
-        method: "PUT",
+        method: "PATCH",
         mode: "cors",
         headers: {
           'Content-Type': 'application/json'
