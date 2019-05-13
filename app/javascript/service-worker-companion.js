@@ -1,6 +1,6 @@
 export const registerServiceWorker = async () => {
-  await navigator.serviceWorker.register('/service-worker.js', { scope: './' });
-  console.log('[Companion]', 'Service worker registered!');
+  const registration = await navigator.serviceWorker.register('/service-worker.js', { scope: './' });
+  console.log('[Companion]', 'Service worker registered for scope:' + registration.scope);
 }
 
 export const subscribeWorkerToService = async (vapidPublicKey) => {

@@ -11,8 +11,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('flashcards_data');
   const { flashcards, vapid_public_key: vapidPublicKey } = JSON.parse(node.getAttribute('data'));
 
-  if (navigator.serviceWorker) {
-    registerServiceWorker();
+  if ('serviceWorker' in navigator) {
+    if (!navigator.serviceWorker.controller) {
+      registerServiceWorker();
+    }
     subscribeWorkerToService(new Uint8Array(vapidPublicKey));
   };
 
