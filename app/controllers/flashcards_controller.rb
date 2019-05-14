@@ -5,7 +5,7 @@ class FlashcardsController < ApplicationController
   def index
     @flashcards = current_user.flashcards.all
     @vapid_public_key = Base64.urlsafe_decode64(ENV['VAPID_PUBLIC_KEY']).bytes
-    @user_email = current_user.email
+    @current_user = current_user
   end
 
   def show

@@ -30,17 +30,8 @@ body {
 
 #logout-link {
   position: absolute;
-  color: purple;
-}
-
-#login-link {
-  position: absolute;
+  z-index: 1000;
   color: green;
-}
-
-#signup-link {
-  position: absolute;
-  color: orange;
 }
 
 .header {
@@ -51,7 +42,11 @@ body {
   color: white;
 }
 
-#header__user-info {
+.header .header__brand:hover {
+  color: white;
+}
+
+.header__user-info {
   color: white;
 }
 

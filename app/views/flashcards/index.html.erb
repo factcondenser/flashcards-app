@@ -2,5 +2,5 @@
 
 <%= content_tag :div,
   id: "flashcards_data",
-  data: { flashcards: @flashcards, vapid_public_key: @vapid_public_key, user_email: @user_email }.to_json do %>
+  data: { flashcards: @flashcards, vapid_public_key: @vapid_public_key, current_user: @current_user }.to_json do %>
 <% end %>

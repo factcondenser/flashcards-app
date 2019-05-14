@@ -1,7 +1,7 @@
 class StudyTimeWorker
   include Sidekiq::Worker
 
-  def perform(notification_hsh)
+  def perform(notification_hsh, user_id)
     Webpush.payload_send(
       message: notification_hsh['message'],
       endpoint: notification_hsh['subscription']['endpoint'],
@@ -13,7 +13,12 @@ class StudyTimeWorker
         private_key: ENV['VAPID_PRIVATE_KEY']
       }
     )
-    duration = [*1..5].sample.minutes # Randomly assign a duration for purposes of demo
-    StudyTimeWorker.perform_in(duration, notification_hsh)
+    # Enqueue next notifcation for the user whose notification was just sent
+    user = User.find(user_id)
+    return unless user.send_notifications?
+
+    duration = [*10..90].sample.seconds # Randomly assign a duration for purposes of demo
+    job_id = StudyTimeWorker.perform_in(duration, notification_hsh, user.id)
+    user.update_attribute(:current_jid, job_id)
   end
 end

@@ -5,7 +5,7 @@
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-user = User.create(email: 'user@example.com', password: 'password')
+user = User.create(email: 'user@example.com', password: 'password', send_notifications: false)
 user.flashcards.create(
   [
     { term: 'hobbit', definition: 'a member of an imaginary race similar to humans, of small size and with hairy feet, in stories by J. R. R. Tolkien' },

@@ -17,7 +17,7 @@ class App extends React.Component {
       flashcards: flashcards,
       danger: '',
       success: '',
-      pushToggled: false
+      pushToggled: this.props.userInfo.send_notifications
     }
   }
 
@@ -303,7 +303,7 @@ class App extends React.Component {
 
     return (
       <div className='containerCustom'>
-        <NavBar userEmail={this.props.userEmail} onPushToggledHandler={onPushToggledHandler} pushToggled={pushToggled}/>
+        <NavBar userEmail={this.props.userInfo.email} onPushToggledHandler={onPushToggledHandler} pushToggled={pushToggled}/>
         <Alert color='danger' isOpen={danger !== ''} toggle={this.onDismissDanger}>{danger}</Alert>
         <Alert color='success' isOpen={success !== ''} toggle={this.onDismissSuccess}>{success}</Alert>
         <div className='flashcards'>

@@ -1,5 +1,8 @@
+require 'sidekiq/api'
+
 class ServiceWorkerController < ApplicationController
-  protect_from_forgery except: [:service_worker, :push]
+  skip_before_action :verify_authenticity_token
+  protect_from_forgery except: [:service_worker, :send_push, :stop_push]
 
   def service_worker
   end
@@ -8,14 +11,19 @@ class ServiceWorkerController < ApplicationController
   end
 
   def send_push
-    duration = [*1..5].sample.minutes # Randomly assign a duration for purposes of demo
-    StudyTimeWorker.perform_in(duration, notification_params.to_h)
+    duration = [*10..90].sample.seconds # Randomly assign a duration for purposes of demo
+    job_id = StudyTimeWorker.perform_in(duration, notification_params.to_h, current_user.id)
+    current_user.update(current_jid: job_id, send_notifications: true)
 
     head :no_content
   end
 
   def stop_push
-    Sidekiq::Queue.new.clear
+    queue = Sidekiq::Queue.new
+    queue.each do |job|
+      job.delete if job.jid == current_user.current_jid
+    end
+    current_user.update(current_jid: nil, send_notifications: false)
 
     head :no_content
   end
