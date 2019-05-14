@@ -3,7 +3,7 @@ class FlashcardsController < ApplicationController
   before_action :set_resource, except: [:index, :new, :create]
 
   def index
-    @flashcards = Flashcard.all
+    @flashcards = current_user.flashcards.all
     @vapid_public_key = Base64.urlsafe_decode64(ENV['VAPID_PUBLIC_KEY']).bytes
   end
 
