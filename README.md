@@ -16,7 +16,7 @@ For double the fun, open up a different browser and turn on notifcations there a
 ## Running the app locally
 This app was built using Ruby 2.6.3 and Rails 6.0.0.
 
-* Configuration
+* Configuration   
 There's a lot going on under the hood here, so stay tuned for a rundown of all the goodies! Now if only there were some way I could let you know when I've finished, some way I could notify you of my progress that would demand the absolute minimum effort on your part...
 
 * Database creation
