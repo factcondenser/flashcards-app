@@ -30,9 +30,6 @@ function Flashcard(props) {
     }
   }
   const errorField = <span className='flashcard__errors'>{errorString}</span>
-  console.log(errors);
-  console.log(fieldName);
-  console.log(errors && errors[fieldName]);
   return (
     <React.Fragment>
       <Card className='flashcard'>
