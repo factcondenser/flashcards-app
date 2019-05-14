@@ -1,28 +1,43 @@
 import React from 'react'
 import uuidv1 from  'uuid/v1';
-import { Alert } from 'reactstrap';
-import Flashcard from './Flashcard'
+import { Alert, Button } from 'reactstrap';
+import ReactCardFlip from 'react-card-flip';
+import Flashcard from './Flashcard';
+import NavBar from './NavBar';
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     const flashcards = {};
     this.props.flashcards.forEach((card) => {
+      card.isFlipped = false;
       flashcards[card.id] = card;
     });
     this.state = {
       flashcards: flashcards,
       danger: '',
       success: '',
+      pushToggled: false
     }
   }
 
-  appendFlashcardForm = () => {
+  onNewHandler = () => {
     const id = uuidv1();
-    const newFlashcard = { id: id, term: '', definition: '', isForm: true, onSubmitHandler: this.createFlashcard }
+    const newFlashcard = { id: id, term: '', definition: '', isForm: true, onSubmitHandler: this.createFlashcard, onCancelHandler: this.onCancelNewHandler }
     this.setState(prevState => {
       const newFlashcards = prevState.flashcards;
       newFlashcards[id] = newFlashcard;
+
+      return {
+        flashcards: newFlashcards
+      }
+    });
+  }
+
+  onCancelNewHandler = (id, e) => {
+    this.setState(prevState => {
+      const newFlashcards = prevState.flashcards;
+      delete newFlashcards[id];
 
       return {
         flashcards: newFlashcards
@@ -76,6 +91,20 @@ class App extends React.Component {
       const newFlashcards = prevState.flashcards;
       newFlashcards[id].isForm = true;
       newFlashcards[id].onSubmitHandler = this.updateFlashcard;
+      newFlashcards[id].onCancelHandler = this.onCancelEditHandler;
+
+      return {
+        flashcards: newFlashcards
+      }
+    });
+  }
+
+  onCancelEditHandler = (id, e) => {
+    this.setState(prevState => {
+      const newFlashcards = prevState.flashcards;
+      newFlashcards[id].isForm = false;
+      delete newFlashcards[id].onSubmitHandler;
+      delete newFlashcards[id].onCancelHandler;
 
       return {
         flashcards: newFlashcards
@@ -109,6 +138,7 @@ class App extends React.Component {
           const newFlashcards = prevState.flashcards;
           newFlashcards[id].isForm = false;
           delete newFlashcards[id].onSubmitHandler;
+          delete newFlashcards[id].onCancelHandler;
 
           return {
             flashcards: newFlashcards,
@@ -149,6 +179,17 @@ class App extends React.Component {
     }
   }
 
+  onFlipHandler = (id, e) => {
+    this.setState(prevState => {
+      const newFlashcards = prevState.flashcards;
+      newFlashcards[id].isFlipped = !prevState.flashcards[id].isFlipped;
+
+      return {
+        flashcards: newFlashcards
+      }
+    });
+  }
+
   onTermChangeHandler = (id, e) => {
     const term = e.target.value;
     this.setState(prevState => {
@@ -181,52 +222,94 @@ class App extends React.Component {
     this.setState({ danger: '' });
   }
 
-  sendPushNotification = async () => {
-    const registration = await navigator.serviceWorker.ready;
-    const subscription = await registration.pushManager.getSubscription();
-    fetch('/push', {
-      method: "POST",
-      mode: "cors",
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      redirect: "follow",
-      referrer: 'no-referrer',
-      body: JSON.stringify({
-        subscription: subscription.toJSON(),
-        message: 'Time to study!'
-      })
-    });
+  sendPushNotifications = async () => {
+    try {
+      const registration = await navigator.serviceWorker.ready;
+      const subscription = await registration.pushManager.getSubscription();
+      const response = await fetch('/push', {
+        method: "POST",
+        mode: "cors",
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        redirect: "follow",
+        referrer: 'no-referrer',
+        body: JSON.stringify({
+          subscription: subscription.toJSON(),
+          message: 'Time to study!'
+        })
+      });
+      if (response.ok) {
+        this.setState({ pushToggled: true});
+      }
+    } catch(error) {
+      console.error(error);
+    }
+  }
+
+  stopPushNotifications = async () => {
+    try {
+      const response = await fetch('/push', {
+        method: "DELETE",
+        mode: "cors",
+        redirect: "follow",
+        referrer: 'no-referrer'
+      });
+      if (response.ok) {
+        this.setState({ pushToggled: false });
+      }
+    } catch(error) {
+      console.error(error);
+    }
   }
 
   render() {
-    const { flashcards, danger, success } = this.state;
+    const { flashcards, danger, success, pushToggled } = this.state;
     const flashcardListing = Object.keys(flashcards).map((id) => {
       const card = flashcards[id];
       return (
-        <Flashcard
-          key={card.id}
-          id={card.id}
-          term={card.term}
-          definition={card.definition}
-          isForm={card.isForm}
-          onTermChangeHandler={this.onTermChangeHandler}
-          onDefinitionChangeHandler={this.onDefinitionChangeHandler}
-          onSubmitHandler={card.onSubmitHandler}
-          onEditHandler={this.onEditHandler}
-          onDestroyHandler={this.destroyFlashcard}
-        />
+        <React.Fragment key={card.id}>
+          <ReactCardFlip className='card' isFlipped={card.isFlipped} flipDirection="vertical">
+            <Flashcard
+              key='front'
+              id={card.id}
+              fieldName='term'
+              fieldValue={card.term}
+              isForm={card.isForm}
+              onFieldChangeHandler={this.onTermChangeHandler}
+              onCancelHandler={card.onCancelHandler}
+              onSubmitHandler={card.onSubmitHandler}
+              onEditHandler={this.onEditHandler}
+              onDestroyHandler={this.destroyFlashcard}
+              onFlipHandler={this.onFlipHandler}
+            />
+            <Flashcard
+              key='back'
+              id={card.id}
+              fieldName='defintion'
+              fieldValue={card.definition}
+              isForm={card.isForm}
+              onFieldChangeHandler={this.onDefinitionChangeHandler}
+              onCancelHandler={card.onCancelHandler}
+              onSubmitHandler={card.onSubmitHandler}
+              onEditHandler={this.onEditHandler}
+              onFlipHandler={this.onFlipHandler}
+            />
+          </ReactCardFlip>
+        </React.Fragment>
       );
     });
+    const onPushToggledHandler = pushToggled ? this.stopPushNotifications : this.sendPushNotifications;
 
     return (
-      <div>
+      <div className='containerCustom'>
+        <NavBar userEmail={this.props.userEmail} onPushToggledHandler={onPushToggledHandler} pushToggled={pushToggled}/>
         <Alert color='danger' isOpen={danger !== ''} toggle={this.onDismissDanger}>{danger}</Alert>
         <Alert color='success' isOpen={success !== ''} toggle={this.onDismissSuccess}>{success}</Alert>
-        {flashcardListing}
-        <br/>
-        <button onClick={this.appendFlashcardForm}>New Flashcard</button>
-        <button onClick={this.sendPushNotification} id="webpush-button">Send Push Notification</button>
+        <div className='flashcards'>
+          {flashcardListing}
+          <Button className='flashcards__new-button' onClick={this.onNewHandler}>new flashcard</Button>
+        </div>
       </div>
     )
   }

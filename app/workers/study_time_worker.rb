@@ -13,5 +13,7 @@ class StudyTimeWorker
         private_key: ENV['VAPID_PRIVATE_KEY']
       }
     )
+    duration = [*1..5].sample.minutes # Randomly assign a duration for purposes of demo
+    StudyTimeWorker.perform_in(duration, notification_hsh)
   end
 end

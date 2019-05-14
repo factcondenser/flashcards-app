@@ -1,1 +1,172 @@
+/* @media (min-width: 568px) {
+  .container {
+    width: 550px;
+  }
+  .flashcards {
+    width: 100%;
+    display: grid;
+    grid-gap: 10px;
+    grid-template-columns: none;
+  }
+}
 
+@media (min-width: 992px) {
+  .container {
+    width: 970px;
+  }
+}
+@media (min-width: 1200px) {
+  .container {
+    width: 1170px;
+  }
+} */
+
+body {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  background-color: #323639;
+}
+
+#logout-link {
+  position: absolute;
+  color: purple;
+}
+
+#login-link {
+  position: absolute;
+  color: green;
+}
+
+#signup-link {
+  position: absolute;
+  color: orange;
+}
+
+.header {
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.header .header__brand {
+  color: white;
+}
+
+#header__user-info {
+  color: white;
+}
+
+.header__webpush-button--on {
+  background-color: rgba(0, 128, 0, 0.6);
+  border-color: green;
+  margin: 0 10px;
+}
+
+.header__webpush-button--on:hover {
+  background-color: rgba(0, 128, 0, 1);
+  border-color: green;
+}
+
+.header__webpush-button--off {
+  background-color: rgba(220, 53, 69, 0.6);
+  border-color: #dc3545;
+  margin: 0 10px;
+}
+
+.header__webpush-button--off:hover {
+  background-color: rgba(220, 53, 69, 1);
+  border-color: #dc3545
+}
+
+.flashcards {
+  display: grid;
+  grid-gap: 15px;
+  grid-template-columns: repeat(3, 1fr);
+  margin: 15px;
+}
+
+.flashcards__new-button {
+  min-height: 250px;
+  border-radius: 5px;
+  font-style: italic;
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.flashcards__new-button:hover {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+.flashcard {
+  min-height: 250px;
+}
+
+.flashcard__body {
+  position: relative;
+}
+
+.flashcard__text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.flashcards .flashcard .flashcard__destroy-button {
+  position: absolute;
+  top: 5px;
+  right: 10px;
+  cursor: pointer;
+  opacity: .3;
+  color: #dc3545;
+}
+
+.flashcards .flashcard .flashcard__destroy-button:hover {
+  opacity: 1;
+  color: #dc3545;
+}
+
+.flashcards .flashcard .flashcard__edit-button {
+  cursor: pointer;
+  opacity: .3;
+  color: #0892d0;
+}
+
+.flashcards .flashcard .flashcard__edit-button:hover {
+  opacity: 1;
+  color: #0892d0;
+}
+
+.flashcards .flashcard .flashcard__flip-button {
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+  cursor: pointer;
+  opacity: .7;
+  font-style: italic;
+}
+
+.flashcards .flashcard .flashcard__flip-button:hover {
+  opacity: .9;
+}
+
+.flashcards .flashcard .flashcard__cancel-button {
+  cursor: pointer;
+  opacity: .7;
+  font-style: italic;
+}
+
+.flashcards .flashcard .flashcard__cancel-button:hover {
+  opacity: .9;
+}
+
+.flashcards .flashcard .flashcard__save-button {
+  cursor: pointer;
+  opacity: .7;
+  color: #0892d0;
+  font-style: italic;
+  float: right;
+}
+
+.flashcards .flashcard .flashcard__save-button:hover {
+  opacity: 1;
+  color: #0892d0;
+}

@@ -7,8 +7,15 @@ class ServiceWorkerController < ApplicationController
   def manifest
   end
 
-  def push
-    StudyTimeWorker.perform_in(1.minute, notification_params.to_h)
+  def send_push
+    duration = [*1..5].sample.minutes # Randomly assign a duration for purposes of demo
+    StudyTimeWorker.perform_in(duration, notification_params.to_h)
+
+    head :no_content
+  end
+
+  def stop_push
+    Sidekiq::Queue.new.clear
 
     head :no_content
   end

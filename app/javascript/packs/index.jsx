@@ -10,7 +10,7 @@ import "../application.css";
 
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('flashcards_data');
-  const { flashcards, vapid_public_key: vapidPublicKey } = JSON.parse(node.getAttribute('data'));
+  const { flashcards, vapid_public_key: vapidPublicKey, user_email: userEmail } = JSON.parse(node.getAttribute('data'));
 
   if (navigator.serviceWorker) {
     if (!navigator.serviceWorker.controller) {
@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   };
 
   ReactDOM.render(
-    <App flashcards={flashcards}/>,
+    <App flashcards={flashcards} userEmail={userEmail}/>,
     document.body.appendChild(document.createElement('div')),
   )
 })
