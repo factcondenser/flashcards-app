@@ -29,9 +29,11 @@ body {
 }
 
 #logout-link {
-  position: absolute;
-  z-index: 1000;
-  color: green;
+  position: fixed;
+  z-index: 1021;
+  color: white;
+  top: 17px;
+  left: 220px;
 }
 
 .header {
@@ -46,7 +48,7 @@ body {
   color: white;
 }
 
-.header__user-info {
+#header__user-info {
   color: white;
 }
 
