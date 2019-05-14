@@ -8,19 +8,14 @@ class ServiceWorkerController < ApplicationController
   end
 
   def push
-    Webpush.payload_send(
-      message: params[:message],
-      endpoint: params[:subscription][:endpoint],
-      p256dh: params[:subscription][:keys][:p256dh],
-      auth: params[:subscription][:keys][:auth],
-      # ttl: 24 * 60 * 60,
-      vapid: {
-        subject: 'mailto:sender@example.com',
-        public_key: ENV['VAPID_PUBLIC_KEY'],
-        private_key: ENV['VAPID_PRIVATE_KEY']
-      }
-    )
+    StudyTimeWorker.perform_in(1.minute, notification_params.to_h)
 
     head :no_content
+  end
+
+  private
+
+  def notification_params
+    params.permit(:message, subscription: [:endpoint, keys: [:p256dh, :auth]])
   end
 end

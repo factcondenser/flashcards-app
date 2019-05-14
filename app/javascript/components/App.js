@@ -187,7 +187,7 @@ class App extends React.Component {
       referrer: 'no-referrer',
       body: JSON.stringify({
         subscription: subscription.toJSON(),
-        message: 'You clicked a button!'
+        message: 'Time to study!'
       })
     });
   }
