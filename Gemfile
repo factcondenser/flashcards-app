@@ -31,6 +31,7 @@ gem 'bootsnap', '>= 1.4.2', require: false
 gem 'devise', '>= 4.6.2'
 gem 'fast_jsonapi'
 gem 'rack-cors'
+gem 'sidekiq'
 gem 'webpush', '>= 0.3.8'
 
 group :development, :test do
