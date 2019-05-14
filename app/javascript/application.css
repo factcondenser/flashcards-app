@@ -100,11 +100,20 @@ body {
   position: relative;
 }
 
-.flashcard__text {
+.flashcard__errors {
+  text-align: center;
+  color: #dc3545;
+}
+
+.flashcard__text, .flashcard__text--has-error {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+}
+
+.flashcard__text--has-error > input, .flashcard__text--has-error > textarea {
+  border-color: #dc3545;
 }
 
 .flashcards .flashcard .flashcard__destroy-button {

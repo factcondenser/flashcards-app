@@ -15,8 +15,6 @@ class App extends React.Component {
     });
     this.state = {
       flashcards: flashcards,
-      danger: '',
-      success: '',
       pushToggled: this.props.userInfo.send_notifications
     }
   }
@@ -74,12 +72,18 @@ class App extends React.Component {
           delete newFlashcards[id];
 
           return {
-            flashcards: newFlashcards,
-            danger: ''
+            flashcards: newFlashcards
           }
         });
       } else {
-        this.setState({ danger: data.message, success: '' });
+        this.setState(prevState => {
+          const newFlashcards = prevState.flashcards;
+          newFlashcards[id].errors = data.errors;
+
+          return {
+            flashcards: newFlashcards
+          }
+        });
       }
     } catch(error) {
       console.error(error);
@@ -105,6 +109,7 @@ class App extends React.Component {
       newFlashcards[id].isForm = false;
       delete newFlashcards[id].onSubmitHandler;
       delete newFlashcards[id].onCancelHandler;
+      delete newFlashcards[id].errors;
 
       return {
         flashcards: newFlashcards
@@ -139,14 +144,21 @@ class App extends React.Component {
           newFlashcards[id].isForm = false;
           delete newFlashcards[id].onSubmitHandler;
           delete newFlashcards[id].onCancelHandler;
+          delete newFlashcards[id].errors;
 
           return {
-            flashcards: newFlashcards,
-            danger: ''
+            flashcards: newFlashcards
           }
         });
       } else {
-        this.setState({ danger: data.message, success: '' });
+        this.setState(prevState => {
+          const newFlashcards = prevState.flashcards;
+          newFlashcards[id].errors = data.errors;
+
+          return {
+            flashcards: newFlashcards
+          }
+        });
       }
     } catch(error) {
       console.error(error);
@@ -214,14 +226,6 @@ class App extends React.Component {
     });
   }
 
-  onDismissSuccess = () => {
-    this.setState({ success: '' });
-  }
-
-  onDismissDanger = () => {
-    this.setState({ danger: '' });
-  }
-
   sendPushNotifications = async () => {
     try {
       const registration = await navigator.serviceWorker.ready;
@@ -264,7 +268,7 @@ class App extends React.Component {
   }
 
   render() {
-    const { flashcards, danger, success, pushToggled } = this.state;
+    const { flashcards, pushToggled } = this.state;
     const flashcardListing = Object.keys(flashcards).map((id) => {
       const card = flashcards[id];
       return (
@@ -272,27 +276,20 @@ class App extends React.Component {
           <ReactCardFlip className='card' isFlipped={card.isFlipped} flipDirection="vertical">
             <Flashcard
               key='front'
-              id={card.id}
+              card={card}
               fieldName='term'
-              fieldValue={card.term}
-              isForm={card.isForm}
               onFieldChangeHandler={this.onTermChangeHandler}
-              onCancelHandler={card.onCancelHandler}
-              onSubmitHandler={card.onSubmitHandler}
               onEditHandler={this.onEditHandler}
               onDestroyHandler={this.destroyFlashcard}
               onFlipHandler={this.onFlipHandler}
             />
             <Flashcard
               key='back'
-              id={card.id}
-              fieldName='defintion'
-              fieldValue={card.definition}
-              isForm={card.isForm}
+              card={card}
+              fieldName='definition'
               onFieldChangeHandler={this.onDefinitionChangeHandler}
-              onCancelHandler={card.onCancelHandler}
-              onSubmitHandler={card.onSubmitHandler}
               onEditHandler={this.onEditHandler}
+              onDestroyHandler={this.destroyFlashcard}
               onFlipHandler={this.onFlipHandler}
             />
           </ReactCardFlip>
@@ -304,8 +301,6 @@ class App extends React.Component {
     return (
       <div className='containerCustom'>
         <NavBar userEmail={this.props.userInfo.email} onPushToggledHandler={onPushToggledHandler} pushToggled={pushToggled}/>
-        <Alert color='danger' isOpen={danger !== ''} toggle={this.onDismissDanger}>{danger}</Alert>
-        <Alert color='success' isOpen={success !== ''} toggle={this.onDismissSuccess}>{success}</Alert>
         <div className='flashcards'>
           {flashcardListing}
           <Button className='flashcards__new-button' onClick={this.onNewHandler}>new flashcard</Button>

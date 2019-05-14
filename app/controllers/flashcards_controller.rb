@@ -19,7 +19,7 @@ class FlashcardsController < ApplicationController
     if @flashcard.save
       render json: FlashcardSerializer.new(@flashcard).serialized_json, status: :created
     else
-      render json: { message: "Failed to create flashcard. Details: #{@flashcard.errors.full_messages.join(', ')}" }, status: :internal_server_error
+      render json: { errors: @flashcard.errors.messages }, status: :internal_server_error
     end
   end
 
@@ -28,9 +28,9 @@ class FlashcardsController < ApplicationController
 
   def update
     if @flashcard.update(resource_params)
-      render json: { message: 'Successfully update flashcard.' }, status: :ok
+      render json: { message: 'Successfully updated flashcard.' }, status: :ok
     else
-      render json: { message: "Failed to update flashcard. Details: #{@flashcard.errors.full_messages.join(', ')}" }, status: :internal_server_error
+      render json: { errors: @flashcard.errors.messages }, status: :internal_server_error
     end
   end
 

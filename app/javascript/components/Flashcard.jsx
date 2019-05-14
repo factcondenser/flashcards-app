@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons'
 
 function Flashcard(props) {
-  const { id, fieldName, fieldValue, isForm, onFieldChangeHandler, onCancelHandler, onSubmitHandler, onEditHandler, onDestroyHandler, onFlipHandler } = props;
+  const { card, fieldName, onFieldChangeHandler, onEditHandler, onDestroyHandler, onFlipHandler } = props;
+  const { id, errors, isForm, onCancelHandler, onSubmitHandler } = card;
+  const fieldValue = card[fieldName];
+
   let field, destroyButton, editButton;
   if (isForm) {
     const cancelButton = <a className='flashcard__cancel-button' onClick={(e) => onCancelHandler(id, e)}>cancel</a>
@@ -20,11 +23,22 @@ function Flashcard(props) {
   }
   const flipButton = <a className='flashcard__flip-button' onClick={(e) => onFlipHandler(id, e) }>flip</a>
 
+  let errorString = '';
+  for (let key in errors) {
+    if (errors.hasOwnProperty(key)) {
+      errorString += `${key} ${errors[key]}. `
+    }
+  }
+  const errorField = <span className='flashcard__errors'>{errorString}</span>
+  console.log(errors);
+  console.log(fieldName);
+  console.log(errors && errors[fieldName]);
   return (
     <React.Fragment>
       <Card className='flashcard'>
         <CardBody className='flashcard__body'>
-          <div className='flashcard__text'>{field}&nbsp;{editButton}</div>
+          {errorField}
+          <div className={`flashcard__text${errors && errors[fieldName] ? '--has-error' : ''}`}>{field}&nbsp;{editButton}</div>
           {destroyButton}
           {flipButton}
         </CardBody>
