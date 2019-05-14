@@ -7,6 +7,7 @@ import ReactDOM from 'react-dom';
 import App from '../components/App';
 import { registerServiceWorker, subscribeWorkerToService } from '../service-worker-companion';
 import "../application.css";
+import "../bootstrap.min.css";
 
 document.addEventListener('DOMContentLoaded', () => {
   const node = document.getElementById('flashcards_data');
