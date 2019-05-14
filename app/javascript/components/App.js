@@ -49,17 +49,23 @@ class App extends React.Component {
         })
       });
       const data = await response.json();
-      const flashcard = data.data.attributes;
 
-      this.setState(prevState => {
-        const newFlashcards = prevState.flashcards;
-        newFlashcards[flashcard.id] = flashcard;
-        delete newFlashcards[id];
+      if (response.ok) {
+        const flashcard = data.data.attributes;
 
-        return {
-          flashcards: newFlashcards
-        }
-      });
+        this.setState(prevState => {
+          const newFlashcards = prevState.flashcards;
+          newFlashcards[flashcard.id] = flashcard;
+          delete newFlashcards[id];
+
+          return {
+            flashcards: newFlashcards,
+            danger: ''
+          }
+        });
+      } else {
+        this.setState({ danger: data.message, success: '' });
+      }
     } catch(error) {
       console.error(error);
     }
@@ -105,11 +111,12 @@ class App extends React.Component {
           delete newFlashcards[id].onSubmitHandler;
 
           return {
-            flashcards: newFlashcards
+            flashcards: newFlashcards,
+            danger: ''
           }
         });
       } else {
-        this.setState({ danger: data.message });
+        this.setState({ danger: data.message, success: '' });
       }
     } catch(error) {
       console.error(error);

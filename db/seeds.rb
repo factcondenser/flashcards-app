@@ -16,7 +16,7 @@ user.flashcards.create(
     { term: 'Web Push Notifications', definition: 'a powerful combination of the Notifications, Push, and Service Worker APIs; to be used with caution' },
     { term: 'embonpoint', definition: 'the bodily property of being well rounded' },
     { term: 'Sidekiq', definition: 'an open source job scheduler written in Ruby, originally authored by Mike Perham' },
-    { term: 'MINASWAN', definition: 'initialism of "Matz is nice and so we are nice", a motto of the Ruby programming language community, in reference to the demeanor of Yukihiro Matsumoto (nicknamed Matz, born 1965), the Japanese computer scientist who designed the language.' },
+    { term: 'MINASWAN', definition: 'initialism of "Matz is nice and so we are nice", a motto of the Ruby programming language community, in reference to the demeanor of Yukihiro Matsumoto (nicknamed Matz, born 1965), the Japanese computer scientist who designed the language' },
     { term: 'creativity', definition: 'the use of the imagination or original ideas, especially in the production of an artistic work' }
   ]
 )

@@ -9,7 +9,8 @@ class ServiceWorkerController < ApplicationController
 
   def push
     StudyTimeWorker.perform_in(1.minute, notification_params.to_h)
-    render status: :created
+
+    head :no_content
   end
 
   private
