@@ -6,7 +6,7 @@ import { faEdit, faTimes } from '@fortawesome/free-solid-svg-icons'
 function Flashcard(props) {
   const { card, fieldName, onFieldChangeHandler, onEditHandler, onDestroyHandler, onFlipHandler } = props;
   const { id, errors, isForm, onCancelHandler, onSubmitHandler } = card;
-  const fieldValue = card[fieldName];
+  const fieldValue = isForm ? card[`tmp${fieldName.charAt(0).toUpperCase()}${fieldName.slice(1)}`] : card[fieldName];
 
   let field, destroyButton, editButton;
   if (isForm) {
