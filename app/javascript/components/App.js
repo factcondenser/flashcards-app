@@ -21,9 +21,9 @@ class App extends React.Component {
 
   onNewHandler = () => {
     const id = uuidv1();
-    const newFlashcard = { id: id, term: '', definition: '', isForm: true, onSubmitHandler: this.createFlashcard, onCancelHandler: this.onCancelNewHandler }
+    const newFlashcard = { id: id, tmpTerm: '', tmpDefinition: '', isForm: true, onSubmitHandler: this.createFlashcard, onCancelHandler: this.onCancelNewHandler }
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
+      const newFlashcards = {...prevState.flashcards};
       newFlashcards[id] = newFlashcard;
 
       return {
@@ -34,7 +34,7 @@ class App extends React.Component {
 
   onCancelNewHandler = (id, e) => {
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
+      const newFlashcards = {...prevState.flashcards};
       delete newFlashcards[id];
 
       return {
@@ -44,7 +44,7 @@ class App extends React.Component {
   }
 
   createFlashcard = async (id, e) => {
-    const { term, definition } = this.state.flashcards[id];
+    const { tmpTerm, tmpDefinition } = this.state.flashcards[id];
     try {
       const response = await fetch(`${process.env.FLASHCARDS_APP_URL}/flashcards`, {
         method: "POST",
@@ -56,8 +56,8 @@ class App extends React.Component {
         referrer: 'no-referrer',
         body: JSON.stringify({
           flashcard: {
-            term: term,
-            definition: definition
+            term: tmpTerm,
+            definition: tmpDefinition
           }
         })
       });
@@ -67,7 +67,7 @@ class App extends React.Component {
         const flashcard = data.data.attributes;
 
         this.setState(prevState => {
-          const newFlashcards = prevState.flashcards;
+          const newFlashcards = {...prevState.flashcards};
           newFlashcards[flashcard.id] = flashcard;
           delete newFlashcards[id];
 
@@ -77,8 +77,12 @@ class App extends React.Component {
         });
       } else {
         this.setState(prevState => {
-          const newFlashcards = prevState.flashcards;
-          newFlashcards[id].errors = data.errors;
+          const newFlashcards = {...prevState.flashcards};
+          const newFlashcard = {
+            ...newFlashcards[id],
+            errors: data.errors
+          }
+          newFlashcards[id] = newFlashcard;
 
           return {
             flashcards: newFlashcards
@@ -92,10 +96,16 @@ class App extends React.Component {
 
   onEditHandler = (id, e) => {
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
-      newFlashcards[id].isForm = true;
-      newFlashcards[id].onSubmitHandler = this.updateFlashcard;
-      newFlashcards[id].onCancelHandler = this.onCancelEditHandler;
+      const newFlashcards = {...prevState.flashcards};
+      const newFlashcard = {
+        ...newFlashcards[id],
+        isForm: true,
+        tmpTerm: newFlashcards[id].term,
+        tmpDefinition: newFlashcards[id].definition,
+        onSubmitHandler: this.updateFlashcard,
+        onCancelHandler: this.onCancelEditHandler,
+      }
+      newFlashcards[id] = newFlashcard;
 
       return {
         flashcards: newFlashcards
@@ -105,11 +115,17 @@ class App extends React.Component {
 
   onCancelEditHandler = (id, e) => {
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
-      newFlashcards[id].isForm = false;
-      delete newFlashcards[id].onSubmitHandler;
-      delete newFlashcards[id].onCancelHandler;
-      delete newFlashcards[id].errors;
+      const newFlashcards = {...prevState.flashcards};
+      const newFlashcard = {
+        ...newFlashcards[id],
+        isForm: false
+      }
+      delete newFlashcard.tmpTerm;
+      delete newFlashcard.tmpDefinition;
+      delete newFlashcard.onSubmitHandler;
+      delete newFlashcard.onCancelHandler;
+      delete newFlashcard.errors;
+      newFlashcards[id] = newFlashcard;
 
       return {
         flashcards: newFlashcards
@@ -118,7 +134,7 @@ class App extends React.Component {
   }
 
   updateFlashcard = async (id, e) => {
-    const { term, definition } = this.state.flashcards[id];
+    const { tmpTerm, tmpDefinition } = this.state.flashcards[id];
     try {
       const response = await fetch(`${process.env.FLASHCARDS_APP_URL}/flashcards/${id}`, {
         method: "PATCH",
@@ -131,8 +147,8 @@ class App extends React.Component {
         body: JSON.stringify({
           flashcard: {
             id: id,
-            term: term,
-            definition: definition
+            term: tmpTerm,
+            definition: tmpDefinition
           }
         })
       });
@@ -140,11 +156,19 @@ class App extends React.Component {
 
       if (response.ok) {
         this.setState(prevState => {
-          const newFlashcards = prevState.flashcards;
-          newFlashcards[id].isForm = false;
-          delete newFlashcards[id].onSubmitHandler;
-          delete newFlashcards[id].onCancelHandler;
-          delete newFlashcards[id].errors;
+          const newFlashcards = {...prevState.flashcards};
+          const newFlashcard = {
+            ...newFlashcards[id],
+            isForm: false,
+            term: tmpTerm,
+            definition: tmpDefinition
+          };
+          delete newFlashcard.tmpTerm;
+          delete newFlashcard.tmpDefinition;
+          delete newFlashcard.onSubmitHandler;
+          delete newFlashcard.onCancelHandler;
+          delete newFlashcard.errors;
+          newFlashcards[id] = newFlashcard;
 
           return {
             flashcards: newFlashcards
@@ -152,8 +176,12 @@ class App extends React.Component {
         });
       } else {
         this.setState(prevState => {
-          const newFlashcards = prevState.flashcards;
-          newFlashcards[id].errors = data.errors;
+          const newFlashcards = {...prevState.flashcards};
+          const newFlashcard = {
+            ...newFlashcards[id],
+            errors: data.errors
+          }
+          newFlashcards[id] = newFlashcard;
 
           return {
             flashcards: newFlashcards
@@ -178,7 +206,7 @@ class App extends React.Component {
       });
       if (response.ok) {
         this.setState(prevState => {
-          const newFlashcards = prevState.flashcards;
+          const newFlashcards = {...prevState.flashcards};
           delete newFlashcards[id];
 
           return {
@@ -193,8 +221,12 @@ class App extends React.Component {
 
   onFlipHandler = (id, e) => {
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
-      newFlashcards[id].isFlipped = !prevState.flashcards[id].isFlipped;
+      const newFlashcards = {...prevState.flashcards};
+      const newFlashcard = {
+        ...newFlashcards[id],
+        isFlipped: !prevState.flashcards[id].isFlipped
+      }
+      newFlashcards[id] = newFlashcard;
 
       return {
         flashcards: newFlashcards
@@ -205,8 +237,12 @@ class App extends React.Component {
   onTermChangeHandler = (id, e) => {
     const term = e.target.value;
     this.setState(prevState => {
-      const newFlashcards = prevState.flashcards;
-      newFlashcards[id].term = term;
+      const newFlashcards = {...prevState.flashcards}
+      const newFlashcard = {
+        ...newFlashcards[id],
+        tmpTerm: term
+      }
+      newFlashcards[id] = newFlashcard;
 
       return {
         flashcards: newFlashcards
@@ -218,7 +254,11 @@ class App extends React.Component {
     const definition = e.target.value;
     this.setState(prevState => {
       const newFlashcards = prevState.flashcards;
-      newFlashcards[id].definition = definition;
+      const newFlashcard = {
+        ...newFlashcards[id],
+        tmpDefinition: definition
+      }
+      newFlashcards[id] = newFlashcard;
 
       return {
         flashcards: newFlashcards
