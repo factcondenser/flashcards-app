@@ -11,7 +11,7 @@ class ServiceWorkerController < ApplicationController
   end
 
   def send_push
-    duration = [*10..90].sample.seconds # Randomly assign a duration for purposes of demo
+    duration = [*10..60].sample.seconds # Randomly assign a duration for purposes of demo
     job_id = StudyTimeWorker.perform_in(duration, notification_params.to_h, current_user.id)
     current_user.update(current_jid: job_id, send_notifications: true)
 

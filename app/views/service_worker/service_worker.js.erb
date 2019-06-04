@@ -61,8 +61,7 @@ function onFetch(event) {
 function onPush(event) {
   console.log('[Serviceworker]', "Pushing!");
   let title = (event.data && event.data.text()) || "Yay a message";
-  let body = "We have received a push message";
-  // let tag = "push-simple-demo-notification-tag";
+  let body = "Head over to Flashcards App and study now!";
   let icon = "<%= asset_path('flashcards-study-app-logo-192.png') %>";
 
   event.waitUntil(
